@@ -36,7 +36,7 @@ int lastPos(ArrayList L){
 
 
 int insertItem(ArrayList L,unsigned char memAddress,unsigned int size, char * allocTime, tAlloc typeOfAllocation,
-			    unsigned int fileDecriptor,unsigned int key){
+			    unsigned int fileDescriptor,unsigned int key){
 	/* We always insert in the last position as the list has to follow a 
 	FIFO behaviour when printing */
 	int a = L-> lastpos;
@@ -45,7 +45,7 @@ int insertItem(ArrayList L,unsigned char memAddress,unsigned int size, char * al
 		L -> nodes[a].size = size;
 		L -> nodes[a].typeOfAllocation = typeOfAllocation;
 		strcpy(L->nodes[a].allocTime,allocTime);
-		L -> nodes[a].fileDecriptor = fileDecriptor;
+		L -> nodes[a].fileDescriptor = fileDescriptor;
 		L -> nodes[a].key = key;
 		L -> lastpos++; 
 		return 1;
@@ -60,30 +60,45 @@ void deleteList(ArrayList * L){
 	free(L);
 	L = NULL;
 }
-char * solveTypeOfAlloc(int typeOfAllocation){
-	switch (typeOfAllocation){
+
+char solveTypeOfAlloc(int a){
+	switch (a){
 		case 0 : return "malloc";
-		case 1 : return "shared";
-		case 2 : return "mapped";
+		case 1 : return "mmap";
+		case 2 : return "shared memory";
+		default : return "unknown type";
 	}
 }
-void printSimple(ArrayList L){
 
+void printSimple(ArrayList L){
+	char * tAlloc;
+	tNode actualNode;
 	for (int i = 0; i < L-> lastpos; ++i)
-	{
+	{   actualNode = L->nodes[i];
+		tAlloc = solveTypeOfAlloc(actualNode.typeOfAllocation);
 		printf("0x%18d: size:%d %s %s\n", L->nodes[i].memAddress,L->nodes[i].size
-								, solveTypeOfAlloc(L->nodes[i].typeOfAllocation),L->nodes[i].allocTime);
+								, tAlloc,L->nodes[i].allocTime);
 	}
 }
 
 void printMalloc(ArrayList L){
-	char * typeOfAlloc;
+	tNode actualNode;
 	for (int i = 0; i < L-> lastpos; ++i)
-	{   
-		typeOfAlloc = solveTypeOfAlloc(L->nodes[i].typeOfAllocation);
-		if (strcmp("malloc",typeOfAlloc) == 0){
-		printf("0x%18d: size:%d %s %s\n", L->nodes[i].memAddress,L->nodes[i].size
-								, typeOfAlloc,L->nodes[i].allocTime);
+	{   actualNode = L->nodes[i];
+		if (actualNode.typeOfAllocation == 0){
+		printf("0x%18d: size:%d %s %s %s\n", actualNode.memAddress,actualNode.size
+								, "malloc",actualNode.allocTime);
+		}
+	}
+}
+
+void printMalloc(ArrayList L){
+	tNode actualNode;
+	for (int i = 0; i < L-> lastpos; ++i)
+	{   actualNode = L->nodes[i];
+		if (actualNode.typeOfAllocation == 1){
+		printf("0x%18d: size:%d %s %s %s %s\n", actualNode.memAddress,actualNode.size
+								, "mmap",actualNode.fileName,actualNode.fileDescriptor,actualNode.allocTime);
 		}
 	}
 }

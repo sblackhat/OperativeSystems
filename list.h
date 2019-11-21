@@ -15,8 +15,9 @@ typedef struct tNode{
 	char * allocTime;
 	tAlloc typeOfAllocation;
 	//Mmap
-	unsigned int fileDecriptor;
-	//Shared key_t key ?
+	char * fileName;
+	unsigned int fileDescriptor;
+	//Shared key_t 
 	unsigned int key;
 }tNode;
 
@@ -34,5 +35,5 @@ int previous(ArrayList L,int pos);
 int lastPos(ArrayList L);
 int insertItem(ArrayList L,unsigned char memAddress,unsigned int size,
 			   char * allocTime, tAlloc typeOfAllocation,
-			   unsigned int fileDecriptor,unsigned int key);
+			   unsigned int fileDescriptor,unsigned int key);
 void deleteList(ArrayList * L);

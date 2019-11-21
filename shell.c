@@ -754,7 +754,7 @@ int main (int argc, char *argv[])
     int i;
     char input [MAXLINE];
     //we initialize the list for the history
-    tList L, A;
+    
     createListH(&L); //Hist list
     createList(&A); //Addresses´ list
 

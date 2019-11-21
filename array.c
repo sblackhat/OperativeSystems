@@ -33,7 +33,7 @@ and thus easily modiable).*/
       it says that i´m not using the pointer*/
    
 void createListH (tListh * L){
-   *L=(tList) malloc (DIMENSION * sizeof (tList));
+   *L=(tListh) malloc (DIMENSION * sizeof (tList));
     if ( L != NULL){
     
     (*L) -> lastPos = 0;
