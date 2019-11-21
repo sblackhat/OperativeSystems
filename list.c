@@ -61,7 +61,7 @@ void deleteList(ArrayList * L){
 	L = NULL;
 }
 
-char solveTypeOfAlloc(int a){
+char * solveTypeOfAlloc(int a){
 	switch (a){
 		case 0 : return "malloc";
 		case 1 : return "mmap";
@@ -86,18 +86,18 @@ void printMalloc(ArrayList L){
 	for (int i = 0; i < L-> lastpos; ++i)
 	{   actualNode = L->nodes[i];
 		if (actualNode.typeOfAllocation == 0){
-		printf("0x%18d: size:%d %s %s %s\n", actualNode.memAddress,actualNode.size
+		printf("0x%18d: size:%d %s %s \n", actualNode.memAddress,actualNode.size
 								, "malloc",actualNode.allocTime);
 		}
 	}
 }
 
-void printMalloc(ArrayList L){
+void printMmap(ArrayList L){
 	tNode actualNode;
 	for (int i = 0; i < L-> lastpos; ++i)
 	{   actualNode = L->nodes[i];
 		if (actualNode.typeOfAllocation == 1){
-		printf("0x%18d: size:%d %s %s %s %s\n", actualNode.memAddress,actualNode.size
+		printf("0x%18d: size:%d %s %s %d %s\n", actualNode.memAddress,actualNode.size
 								, "mmap",actualNode.fileName,actualNode.fileDescriptor,actualNode.allocTime);
 		}
 	}
