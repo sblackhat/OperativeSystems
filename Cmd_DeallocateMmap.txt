@@ -1,0 +1,72 @@
+//Cmd_DeallocateMmap
+       #include <sys/mman.h>
+
+
+
+void Cmd_Borrarkey (char * tr[]){
+	char * key = tr[]; 
+
+	if (key == NULL || (int cl = strtol(key,NULL,10)) == IPC_PRIVATE)
+	{
+		perror("Key at Borrarkey is not a valid key.\n");
+		return;
+	}
+	if ((id = shmget (clave, 0, 0666)) == -1 )
+	{
+		perror ("Impossible to obtain the shared memory.\n");
+		return;
+	}
+	if ( shmctl(id, IPC_RMID, NULL) == -1)
+	{
+		perror ("Impossible to remove the shared memory.\n");
+		return;
+	}
+
+}
+
+void Cmd_DesasignarShared (char * tr[], MemoryList A){
+	if (tr[] == NULL)
+	{
+		printShared(A);
+		return;
+	}	
+	int key = strtol(tr[0], NULL, 10);
+	int pos = findElementShared(A, Shared, key);
+	if ( pos == -1)
+	{
+		printShared(A);
+		return;
+	}
+
+	shmdt (A->nodes[pos].memAddress);
+	printf("block at address %p deallocated (shared memory)", A->nodes[pos].memAddress);
+	delete(A, pos);
+
+
+}
+
+void Cmd_DesasignarMmap (char * tr[], MemoryList A){
+	
+	if (tr[] == NULL) 
+	{
+		printMmap(A);
+		return;
+	}	
+	
+	int pos = findElementMmap(A, Mmap, tr[]);
+	if ( pos == (-1) ) 
+	{
+		printMmap(A);
+		return;
+	}
+	if( (munmap(A->nodes[pos].memAddress, A->nodes[pos].size) == -1) || (close (A -> nodes[pos].fileDescriptor) == -1) )
+	{
+		perror("Not possible to deallocate mmap.\n");
+		return;
+		}
+	printf ("Block at addres 0x%p deallocated (mmap)", A->nodes[pos].memAddress);
+
+}
+
+
+
